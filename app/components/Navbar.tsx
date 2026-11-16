@@ -55,11 +55,12 @@ export const Navbar = () => {
         </Link>
         <div className="flex shrink-0 items-center gap-2">
           <SearchModal />
-
-          <button className="rounded-md bg-[#c0392b] px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-[#a93226] md:hidden">
+          <Link
+            href="/profile"
+            className="inline-flex items-center gap-2 rounded-md bg-[#c0392b] px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-[#a93226] md:hidden">
+            <FaRegUserCircle className="h-4 w-4 shrink-0" />
             Profile
-            <FaRegUserCircle />
-          </button>
+          </Link>
         </div>
       </div>
 

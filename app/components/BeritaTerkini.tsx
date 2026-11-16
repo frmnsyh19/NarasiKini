@@ -24,7 +24,7 @@ export default function BeritaTerkini() {
             </h2>
           </div>
 
-          <div className="flex flex-wrap items-center lg:gap-2">
+          <div className="flex items-center lg:gap-2">
             {filterKategori.map((kategori) => (
               <button
                 key={kategori}
