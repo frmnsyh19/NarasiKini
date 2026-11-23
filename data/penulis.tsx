@@ -43,8 +43,7 @@ export const penulis: Penulis = {
     { nama: "TikTok", href: "#", ikon: "tiktok" },
   ],
   tentang: [
-    "Saya adalah pribadi yang selalu ingin berkembang, baik dalam bidang akademik, profesional, maupun kehidupan sehari-hari. Dengan latar belakang pendidikan di bidang komunikasi, saya percaya bahwa jurnalistik adalah jembatan untuk menyebarkan kebenaran dan membangun pemahaman yang lebih baik di masyarakat.",
-    "Selain menulis, saya juga aktif dalam dunia digital, senang mengeksplorasi teknologi, dan tertarik pada berbagai isu terkini yang relevan dengan kehidupan masyarakat.",
+    "NARASI KINI adalah sebuah portal berita digital yang saya rancang sebagai media penyampaian informasi kepada masyarakat. Portal ini menyajikan berbagai jenis berita, baik hard news maupun soft news, dengan topik seperti nasional, olahraga, teknologi, dan peristiwa. Tujuan saya membangun NARASI KINI adalah menghadirkan informasi yang aktual, faktual, dan mudah dipahami oleh masyarakat. Saya menggunakan slogan Mengabarkan Fakta, Menghadirkan Cerita karena ingin menjadikan NARASI KINI sebagai media yang tidak hanya menyampaikan peristiwa, tetapi juga menghadirkan cerita dan informasi yang memiliki nilai bagi pembaca.",
   ],
   visi: "Menjadi jurnalis yang profesional, kreatif, dan berintegritas dalam menyampaikan informasi untuk masyarakat.",
   misi: [

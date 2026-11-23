@@ -2,31 +2,57 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import SearchModal from "./SearchMenu";
-import { artikel, getArtikel } from "@/data/arikel";
 import { FaRegUserCircle } from "react-icons/fa";
+import SearchModal from "./SearchMenu";
+import type { IconType } from "react-icons";
+import {
+  FaHome,
+  FaFlag,
+  FaFutbol,
+  FaMicrochip,
+  FaBullhorn,
+} from "react-icons/fa";
+import {
+  daftarKategori,
+  getArtikel,
+  getTerbaruByKategori,
+  type Kategori,
+} from "@/data/arikel";
 
-// const menus = [
-//   { label: "Beranda", href: "/" },
-//   { label: "Nasional", href: "/#terkini" },
-//   { label: "Olahraga", href: "/#terkini" },
-//   { label: "Teknologi", href: "/#terkini" },
-// ];
+import { FcMediumPriority } from "react-icons/fc";
+import { FcGlobe } from "react-icons/fc";
+type Menu = {
+  label: string;
+  href: string;
+  kategori: Kategori | null;
+  ikon: IconType; // komponen ikon
+};
 
-type Menu = { label: string; href: string; kategori: string | null };
+const ikonKategori: Record<Kategori, IconType> = {
+  Nasional: FaFlag,
+  Olahraga: FaFutbol,
+  Teknologi: FaMicrochip,
+  Peristiwa: FaBullhorn,
+};
 
-// tiap kategori mengarah ke berita pertama di kategori itu
-const kategoriMenu: Menu[] = (
-  ["Nasional", "Olahraga", "Teknologi"] as const
-).flatMap((k) => {
-  const pertama = artikel.find((a) => a.kategori === k);
-  return pertama
-    ? [{ label: k, href: `/berita/${pertama.slug}`, kategori: k }]
+// tiap kategori mengarah ke berita TERBARU di kategori itu
+// (kategori yang belum punya berita tidak ditampilkan)
+const kategoriMenu: Menu[] = daftarKategori.flatMap((k) => {
+  const terbaru = getTerbaruByKategori(k);
+  return terbaru
+    ? [
+        {
+          label: k,
+          href: `/berita/${terbaru.slug}`,
+          kategori: k,
+          ikon: ikonKategori[k],
+        },
+      ]
     : [];
 });
 
 const menus: Menu[] = [
-  { label: "Beranda", href: "/", kategori: null },
+  { label: "Beranda", href: "/", kategori: null, ikon: FaHome },
   ...kategoriMenu,
 ];
 
@@ -36,7 +62,7 @@ export const Navbar = () => {
   const isActive = (menu: Menu) => {
     if (!menu.kategori) return pathname === "/";
 
-    // pathname detail berita: /berita/[slug]
+    // halaman detail berita: /berita/[slug]
     if (!pathname.startsWith("/berita/")) return false;
     const slug = pathname.split("/")[2];
     return getArtikel(slug)?.kategori === menu.kategori;
@@ -53,6 +79,7 @@ export const Navbar = () => {
             className="h-10 w-auto md:h-14"
           />
         </Link>
+
         <div className="flex shrink-0 items-center gap-2">
           <SearchModal />
           <Link
@@ -70,27 +97,33 @@ export const Navbar = () => {
           {/* menu bisa digeser horizontal di layar kecil */}
           <ul className="flex items-center gap-5 overflow-x-auto whitespace-nowrap [scrollbar-width:none] md:gap-8 [&::-webkit-scrollbar]:hidden">
             {menus.map((menu) => {
-              const active = isActive(menu); // sebelumnya: isActive(menu.href)
+              const active = isActive(menu);
+              const Ikon = menu.ikon; // huruf besar, supaya dibaca sebagai komponen
 
               return (
                 <li key={menu.label}>
                   <Link
                     href={menu.href}
-                    className={`block border-b-[3px]  py-3 text-base font-bold transition-colors md:text-lg ${
+                    className={`flex items-center gap-2 border-b-[3px] py-3 text-base font-bold transition-colors md:text-lg ${
                       active
                         ? "border-[#c0392b] text-[#c0392b]"
                         : "border-transparent text-neutral-900 hover:text-[#c0392b]"
                     }`}>
+                    <Ikon className="h-4 w-4 shrink-0" />
                     {menu.label}
                   </Link>
                 </li>
               );
             })}
           </ul>
-          <div className="hidden md:inline">
-            <button className="shrink-0 rounded-md bg-[#c0392b] px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-[#a93226] md:px-4 md:py-2">
+
+          <div className="hidden md:block">
+            <Link
+              href="/profile"
+              className="inline-flex items-center gap-2 rounded-md bg-[#c0392b] px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-[#a93226]">
+              <FaRegUserCircle className="h-4 w-4 shrink-0" />
               Profile
-            </button>
+            </Link>
           </div>
         </div>
       </nav>

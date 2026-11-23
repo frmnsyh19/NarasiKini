@@ -58,7 +58,9 @@ export default function SearchModal() {
     return artikel
       .filter((a) => {
         const isi = a.isi
-          .map((b) => (typeof b === "string" ? b : b.subjudul))
+          .map((b) =>
+            typeof b === "string" ? b : "subjudul" in b ? b.subjudul : "",
+          )
           .join(" ");
         return [a.judul, a.ringkasan, a.kategori, isi].some((t) =>
           t.toLowerCase().includes(q),

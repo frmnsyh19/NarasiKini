@@ -124,12 +124,16 @@ export default function ProfilePage() {
               Tentang Saya
             </h3>
 
-            <div className="mt-5 flex flex-col gap-5 sm:flex-row">
-              <img
-                src={data.fotoTentang}
-                alt=""
-                className="aspect-[4/3] w-full rounded-lg object-cover sm:w-52 sm:shrink-0"
-              />
+            <div className="mt-5 flex flex-col gap-5 sm:flex-row sm:items-stretch">
+              {/* kotak logo: tinggi mengikuti kolom teks di sebelahnya */}
+              <div className="relative h-40 w-full overflow-hidden rounded-lg bg-slate-50 ring-1 ring-black/5 sm:h-auto sm:min-h-40 sm:w-52 sm:shrink-0">
+                <img
+                  src="/aboutnarasikini.png"
+                  alt="Narasi Kini"
+                  className="absolute inset-0 h-full w-full object-contain p-6"
+                />
+              </div>
+
               <div className="space-y-3 text-sm leading-relaxed text-neutral-700">
                 {data.tentang.map((p, i) => (
                   <p key={i}>{p}</p>
@@ -140,11 +144,12 @@ export default function ProfilePage() {
 
           <section className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-black/5 md:p-6">
             <h3 className="border-l-4 border-[#f0b429] pl-3 text-xl font-extrabold text-[#0b1b3a]">
-              Visi &amp; Misi
+              Visi, Misi &amp; Target Audiens
             </h3>
 
-            <div className="mt-5 space-y-6">
-              <div className="flex gap-4">
+            <div className="mt-5 divide-y divide-neutral-200">
+              {/* Visi */}
+              <div className="flex gap-4 py-5 first:pt-0 last:pb-0">
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#0b1b3a] text-[#f0b429]">
                   <Ikon nama="target" className="h-6 w-6" />
                 </span>
@@ -156,7 +161,8 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div className="flex gap-4">
+              {/* Misi */}
+              <div className="flex gap-4 py-5 first:pt-0 last:pb-0">
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#0b1b3a] text-[#f0b429]">
                   <Ikon nama="roket" className="h-6 w-6" />
                 </span>
@@ -167,6 +173,23 @@ export default function ProfilePage() {
                       <li key={i}>{m}</li>
                     ))}
                   </ol>
+                </div>
+              </div>
+
+              {/* Target Audiens */}
+              <div className="flex gap-4 py-5 first:pt-0 last:pb-0">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#0b1b3a] text-[#f0b429]">
+                  <Ikon nama="users" className="h-6 w-6" />
+                </span>
+                <div>
+                  <h4 className="font-extrabold text-[#0b1b3a]">
+                    Target Audiens
+                  </h4>
+                  <p className="mt-1 text-sm leading-relaxed text-neutral-700">
+                    Target audiens NARASI KINI adalah masyarakat umum, dengan
+                    fokus utama pada generasi muda berusia 17 sampai 35 tahun,
+                    khususnya pelajar, mahasiswa, dan pekerja muda.
+                  </p>
                 </div>
               </div>
             </div>

@@ -3,9 +3,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { artikel, formatTanggal } from "@/data/arikel";
+// 3 berita terbaru (tanggal terbaru di atas)
+const terbaru = [...artikel]
+  .sort((a, b) => b.tanggal.localeCompare(a.tanggal))
+  .slice(0, 3);
 
-const beritaUtama = artikel; // slider
-const pilihanRedaksi = artikel; // sidebar
+const beritaUtama = terbaru; // slider
+const pilihanRedaksi = terbaru; // sidebar
 
 export default function HeroBerita() {
   const [index, setIndex] = useState(0);

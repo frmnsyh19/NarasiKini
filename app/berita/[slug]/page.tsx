@@ -1,6 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artikel, getArtikel, getTerkait, formatTanggal } from "@/data/arikel";
+import {
+  artikel,
+  getArtikel,
+  getTerkait,
+  getLainnyaSekategori,
+  formatTanggal,
+} from "@/data/arikel";
 import { Navbar } from "@/app/components/Navbar";
 import Footer from "@/app/components/Footer";
 
@@ -29,11 +35,12 @@ export default async function DetailBeritaPage({
   if (!data) notFound();
 
   const terkait = getTerkait(slug);
+  const lainnya = getLainnyaSekategori(slug); // BARU
   const teksBagikan = encodeURIComponent(data.judul);
 
   return (
-    <main className=" flex flex-col w-full flex justify-center items-center">
-      <div className="w-11/12 flex justify-center items-center">
+    <main className="flex w-full flex-col items-center justify-center">
+      <div className="flex w-11/12 items-center justify-center">
         <Navbar />
       </div>
 
@@ -77,14 +84,31 @@ export default async function DetailBeritaPage({
                 className="aspect-[16/10] w-full object-cover"
               />
               <figcaption className="mt-2 text-sm text-neutral-500">
-                Ilustrasi: {data.judul}
+                {data.keteranganGambar ?? `Ilustrasi: ${data.judul}`}
               </figcaption>
             </figure>
 
             {/* isi berita */}
             <div className="mt-8 space-y-6 text-lg leading-8 text-neutral-800">
               {data.isi.map((blok, i) => {
-                if (typeof blok !== "string") {
+                // 1. paragraf
+                if (typeof blok === "string") {
+                  return (
+                    <div key={i}>
+                      <p>{blok}</p>
+
+                      {/* kutipan (opsional) disisipkan setelah paragraf ke-2 */}
+                      {i === 1 && data.kutipan && (
+                        <blockquote className="my-8 border-l-4 border-[#c0392b] pl-6 text-2xl font-bold leading-snug text-neutral-900">
+                          “{data.kutipan}”
+                        </blockquote>
+                      )}
+                    </div>
+                  );
+                }
+
+                // 2. subjudul
+                if ("subjudul" in blok) {
                   return (
                     <h2
                       key={i}
@@ -94,17 +118,20 @@ export default async function DetailBeritaPage({
                   );
                 }
 
+                // 3. foto di dalam artikel
                 return (
-                  <div key={i}>
-                    <p>{blok}</p>
-
-                    {/* kutipan (opsional) disisipkan setelah paragraf ke-2 */}
-                    {i === 1 && data.kutipan && (
-                      <blockquote className="my-8 border-l-4 border-[#c0392b] pl-6 text-2xl font-bold leading-snug text-neutral-900">
-                        “{data.kutipan}”
-                      </blockquote>
+                  <figure key={i}>
+                    <img
+                      src={blok.foto}
+                      alt={blok.keterangan ?? data.judul}
+                      className="w-full object-cover"
+                    />
+                    {blok.keterangan && (
+                      <figcaption className="mt-2 text-sm text-neutral-500">
+                        {blok.keterangan}
+                      </figcaption>
                     )}
-                  </div>
+                  </figure>
                 );
               })}
             </div>
@@ -129,6 +156,56 @@ export default async function DetailBeritaPage({
                 X / Twitter
               </a>
             </div>
+
+            {/* ===== BARU: berita lain di kategori yang sama ===== */}
+            {lainnya.length > 0 && (
+              <section className="mt-12 border-t border-neutral-300 pt-8">
+                <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#c0392b]">
+                  Kategori {data.kategori}
+                </p>
+                <h2 className="mt-1 text-2xl font-extrabold text-neutral-900">
+                  Berita lainnya di {data.kategori}
+                </h2>
+
+                <div className="mt-6 space-y-5">
+                  {lainnya.map((item) => (
+                    <Link
+                      key={item.slug}
+                      href={`/berita/${item.slug}`}
+                      className="group flex flex-col overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-black/5 sm:flex-row">
+                      <img
+                        src={item.gambar}
+                        alt={item.judul}
+                        className="aspect-[16/10] w-full object-cover sm:aspect-auto sm:w-56 sm:shrink-0"
+                      />
+
+                      <div className="p-4 md:p-5">
+                        <p className="text-xs font-bold uppercase tracking-wide text-[#c0392b]">
+                          {item.kategori}
+                          <span className="mx-2 text-neutral-400">/</span>
+                          {formatTanggal(item.tanggal)}
+                        </p>
+
+                        <h3 className="mt-1 text-lg font-extrabold leading-snug text-neutral-900 group-hover:text-[#c0392b] md:text-xl">
+                          {item.judul}
+                        </h3>
+
+                        <p className="mt-2 line-clamp-2 text-sm text-neutral-600">
+                          {item.ringkasan}
+                        </p>
+
+                        <span className="mt-3 inline-block text-sm font-bold text-[#c0392b]">
+                          Baca selengkapnya{" "}
+                          <span className="inline-block transition-transform group-hover:translate-x-1">
+                            →
+                          </span>
+                        </span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            )}
 
             <Link
               href="/#terkini"
