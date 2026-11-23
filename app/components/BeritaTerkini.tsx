@@ -24,19 +24,21 @@ export default function BeritaTerkini() {
             </h2>
           </div>
 
-          <div className="flex items-center lg:gap-2">
-            {filterKategori.map((kategori) => (
-              <button
-                key={kategori}
-                onClick={() => setAktif(kategori)}
-                className={`rounded-md px-4 py-2.5 text-sm font-semibold transition-colors ${
-                  aktif === kategori
-                    ? "bg-[#c0392b] text-white"
-                    : "text-neutral-900 hover:text-[#c0392b]"
-                }`}>
-                {kategori}
-              </button>
-            ))}
+          <div className="-mx-4 overflow-x-auto px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:mx-0 lg:overflow-visible lg:px-0">
+            <div className="flex w-max items-center gap-1 lg:w-auto lg:gap-2">
+              {filterKategori.map((kategori) => (
+                <button
+                  key={kategori}
+                  onClick={() => setAktif(kategori)}
+                  className={`shrink-0 whitespace-nowrap rounded-md px-4 py-2.5 text-sm font-semibold transition-colors ${
+                    aktif === kategori
+                      ? "bg-[#c0392b] text-white"
+                      : "text-neutral-900 hover:text-[#c0392b]"
+                  }`}>
+                  {kategori}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
